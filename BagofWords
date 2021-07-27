@@ -1,0 +1,42 @@
+
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+import nltk
+
+#download punkt
+nltk.download('punkt')
+#download stopwords
+nltk.download('stopwords')
+paragraph = \
+    """Assess the challenges of evaluating GANs and compare different generative models
+  - Use the Fréchet Inception Distance (FID) method to evaluate the fidelity and diversity of GANs - Identify sources 
+  of bias and  the ways to detect it in GANs 
+ - Learn and implement the techniques associated with the state-of-the-art StyleGANs The DeepLearning.
+  AI Generative Adversarial Networks (GANs) Specialization provides an exciting introduction to image generation with GANs,
+  charting a path from foundational concepts to advanced techniques through an easy-to-understand approach.
+  It also covers social implications, including bias in ML and the ways to detect it, privacy preservation, and more. 
+  Build a comprehensive knowledge base and gain hands-on experience in GANs. Train your own model using PyTorch, 
+  use it to create images,  and evaluate a variety of advanced GANs. This Specialization provides an accessible pathway 
+  for all levels of learners looking to break into the GANs space or   apply GANs to their own projects, even without
+  prior familiarity with advanced math and machine learning research"""
+ps = PorterStemmer()
+wordnet = WordNetLemmatizer()
+sentences = nltk.sent_tokenize(paragraph)
+corpus = []
+for i in range(len(sentences)):
+    review = re.sub('[^a-zA-Z]', ' ', sentences[i])
+    review = review.lower()
+    review = review.split()
+    review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
+    review = ' '.join(review)
+    corpus.append(review)
+
+# Creating the Bag of Words model
+from sklearn.feature_extraction.text import CountVectorizer
+
+cv = CountVectorizer(max_features=1500)
+X = cv.fit_transform(corpus).toarray()
+print("\n",X)
