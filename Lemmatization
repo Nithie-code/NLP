@@ -25,3 +25,4 @@ for i in range(len(sentences)):
 for word in sentences:
     print(word)     
     
+
